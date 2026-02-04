@@ -789,3 +789,14 @@ footer .socials a:hover {
 .CV:hover {
   background-color: #5b6c78; /* Couleur de fond du bouton au survol */
 }
+.about p {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+.portfolio .modal p {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  margin-bottom: 1.4rem;
+}

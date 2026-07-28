@@ -800,3 +800,30 @@ footer .socials a:hover {
   hyphens: auto;
   margin-bottom: 1.4rem;
 }
+
+.map {
+  position: relative;
+  height: 400px;
+  margin-top: 2rem;
+  border-radius: 5px;
+  border: 1px solid #EEE;
+}
+
+.map .ol-viewport {
+  overflow: visible !important;
+}
+
+.ol-popup {
+  min-width: 220px;
+  max-width: 260px;
+  padding: 1rem 1.4rem;
+  background: #FFF;
+  border: 1px solid #EEE;
+  border-radius: 5px;
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.2);
+  font-size: 1.3rem;
+}
+
+.ol-popup:empty {
+  display: none;
+}

@@ -252,4 +252,90 @@ const observerIntersectionAnimation = () => {
 
 observerIntersectionAnimation();
 
+/* Carte du parcours professionnel */
+
+function initMap() {
+  const mapElement = document.getElementById('map');
+  if (!mapElement) return;
+
+  const popupElement = document.getElementById('map-popup');
+  const popup = new ol.Overlay({
+    element: popupElement,
+    positioning: 'bottom-center',
+    offset: [0, -12],
+    stopEvent: false,
+  });
+
+  const points = [
+    {
+      coords: [6.398747372410764, 46.488447808125834],
+      employeur: "Commune d'Aubonne Services techniques",
+      poste: 'Chargé de projet SIG',
+      annees: '2024 -',
+    },
+    {
+      coords: [6.634095069310552, 46.52481826281061],
+      employeur: 'Direction générale du territoire et du logement (DGTL)',
+      poste: 'Apprentissage + CDD 1 an',
+      annees: '2019-2024',
+    },
+  ];
+
+  const features = points.map(point => {
+    const feature = new ol.Feature({
+      geometry: new ol.geom.Point(ol.proj.fromLonLat(point.coords)),
+    });
+    feature.set('info', point);
+    return feature;
+  });
+
+  const vectorSource = new ol.source.Vector({ features });
+
+  const vectorLayer = new ol.layer.Vector({
+    source: vectorSource,
+    style: new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 8,
+        fill: new ol.style.Fill({ color: '#e63946' }),
+        stroke: new ol.style.Stroke({ color: '#ffffff', width: 2 }),
+      }),
+    }),
+  });
+
+  const map = new ol.Map({
+    target: 'map',
+    layers: [
+      new ol.layer.Tile({ source: new ol.source.OSM() }),
+      vectorLayer,
+    ],
+    overlays: [popup],
+    view: new ol.View({
+      center: ol.proj.fromLonLat([6.5, 46.505]),
+      zoom: 11,
+    }),
+  });
+
+  map.getView().fit(vectorSource.getExtent(), { padding: [60, 60, 60, 60], maxZoom: 14 });
+
+  map.on('click', (event) => {
+    const feature = map.forEachFeatureAtPixel(event.pixel, feat => feat);
+
+    if (feature) {
+      const info = feature.get('info');
+      popupElement.innerHTML = `<strong>${info.employeur}</strong><br>${info.poste}<br><em>${info.annees}</em>`;
+      popup.setPosition(event.coordinate);
+    } else {
+      popupElement.innerHTML = '';
+      popup.setPosition(undefined);
+    }
+  });
+
+  map.on('pointermove', (event) => {
+    const hit = map.hasFeatureAtPixel(event.pixel);
+    map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+  });
+}
+
+initMap();
+
 
